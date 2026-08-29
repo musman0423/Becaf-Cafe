@@ -182,7 +182,7 @@
 <body>
 
     <header>
-        <h1> Becaf-Cafe🍔🥂 </h1>
+        <h1>Becaf-Cafe🍔🥂</h1>
         <p>Fresh Taste • Great Food • Happy Moments</p>
 
         <button class="theme-button" onclick="changeTheme()">
