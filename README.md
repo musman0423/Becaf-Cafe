@@ -1,758 +1,379 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bicaf-Cafe</title>
 
-<title>DOS WordPad</title>
-
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        background: #000;
-        color: #00ff00;
-        font-family: "Courier New", monospace;
-        min-height: 100vh;
-    }
-
-    .dos-screen {
-        width: 100%;
-        min-height: 100vh;
-        padding: 15px;
-        background: #000;
-    }
-
-    .title {
-        text-align: center;
-        color: #00ff00;
-        font-size: 30px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        text-shadow: 0 0 8px #00ff00;
-    }
-
-    .top-line {
-        border-top: 1px solid #00ff00;
-        border-bottom: 1px solid #00ff00;
-        padding: 8px;
-        text-align: center;
-        margin-bottom: 15px;
-    }
-
-    button {
-        background: #000;
-        color: #00ff00;
-        border: 1px solid #00ff00;
-        padding: 10px 16px;
-        margin: 4px;
-        font-family: "Courier New", monospace;
-        font-size: 15px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #00ff00;
-        color: #000;
-    }
-
-    .main {
-        display: flex;
-        gap: 15px;
-        align-items: flex-start;
-    }
-
-    /* DIRECTORY */
-    .directory {
-        width: 300px;
-        min-height: 600px;
-        border: 1px solid #00ff00;
-        padding: 10px;
-        flex-shrink: 0;
-    }
-
-    .directory h2 {
-        font-size: 18px;
-        text-align: center;
-        border-bottom: 1px solid #00ff00;
-        padding-bottom: 8px;
-        margin-top: 0;
-    }
-
-    .file-list {
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .file-item {
-        border-bottom: 1px dotted #00ff00;
-        padding: 10px 4px;
-        cursor: pointer;
-    }
-
-    .file-item:hover {
-        background: #003300;
-    }
-
-    .file-name {
-        font-weight: bold;
-    }
-
-    .file-date {
-        font-size: 11px;
-        margin-top: 4px;
-    }
-
-    .file-actions {
-        margin-top: 6px;
-    }
-
-    .file-actions button {
-        font-size: 11px;
-        padding: 4px 7px;
-    }
-
-    /* EDITOR */
-    .editor-area {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .toolbar {
-        border: 1px solid #00ff00;
-        padding: 8px;
-        margin-bottom: 10px;
-    }
-
-    .filename {
-        width: 250px;
-        background: #000;
-        color: #00ff00;
-        border: 1px solid #00ff00;
-        padding: 9px;
-        font-family: "Courier New", monospace;
-    }
-
-    .status {
-        margin: 8px 0;
-        font-size: 13px;
-    }
-
-    /* A4 PAGE */
-    .page-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        overflow-x: auto;
-        padding: 10px;
-    }
-
-    .a4-page {
-        background: #fff;
-        color: #000;
-        width: 794px;
-        min-height: 1123px;
-        padding: 65px;
-        box-shadow: 0 0 15px #00ff00;
-        outline: none;
-        font-family: Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.5;
-        white-space: pre-wrap;
-    }
-
-    .a4-page:focus {
-        box-shadow: 0 0 25px #00ff00;
-    }
-
-    .bottom-bar {
-        border-top: 1px solid #00ff00;
-        margin-top: 15px;
-        padding-top: 10px;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .empty {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 13px;
-    }
-
-    @media (max-width: 900px) {
-        .main {
-            flex-direction: column;
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
-        .directory {
-            width: 100%;
-            min-height: auto;
+        body {
+            background: #252525;
+            color: white;
+            min-height: 100vh;
+            transition: 0.5s;
         }
 
-        .file-list {
-            max-height: 250px;
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #202020, #5ec8f8);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .a4-page {
-            width: 794px;
+        header h1 {
+            font-size: 45px;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 12px #5ec8f8;
         }
-    }
-</style>
+
+        header p {
+            margin-top: 8px;
+            color: #dff7ff;
+            font-size: 18px;
+        }
+
+        /* Navigation */
+        nav {
+            background: #181818;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav a {
+            color: #69d2ff;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: white;
+            text-shadow: 0 0 10px #5ec8f8;
+        }
+
+        /* Main */
+        main {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #63d0ff;
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        .menu-section {
+            margin-bottom: 60px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-card {
+            background: #333333;
+            border: 1px solid #4fc3f7;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: #3d3d3d;
+            box-shadow: 0 0 20px rgba(79,195,247,0.6);
+        }
+
+        .menu-card h3 {
+            color: #67d5ff;
+            margin-bottom: 10px;
+            font-size: 21px;
+        }
+
+        .menu-card p {
+            color: #dddddd;
+            line-height: 1.5;
+        }
+
+        .icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        /* Theme Button */
+        .theme-button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: #5ec8f8;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .theme-button:hover {
+            background: white;
+            box-shadow: 0 0 15px #5ec8f8;
+        }
+
+        /* Footer */
+        footer {
+            background: #151515;
+            text-align: center;
+            padding: 25px;
+            color: #aaa;
+            border-top: 1px solid #4fc3f7;
+        }
+
+        footer span {
+            color: #63d0ff;
+        }
+
+        /* Light theme */
+        body.light-theme {
+            background: #eaf8ff;
+            color: #222;
+        }
+
+        body.light-theme .menu-card {
+            background: white;
+            color: #222;
+        }
+
+        body.light-theme .menu-card p {
+            color: #555;
+        }
+
+        body.light-theme nav {
+            background: #d7f3ff;
+        }
+
+        body.light-theme footer {
+            background: #ccefff;
+            color: #333;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="dos-screen">
+    <header>
+        <h1>☕ Bicaf-Cafe</h1>
+        <p>Fresh Taste • Great Food • Happy Moments</p>
 
-    <div class="title">
-        DOS WORDPAD
-    </div>
+        <button class="theme-button" onclick="changeTheme()">
+            🌙 Change Theme
+        </button>
+    </header>
 
-    <div class="top-line">
-        C:\DOS\WORDPAD&gt;
-    </div>
+    <nav>
+        <a href="#food">Food Menu</a>
+        <a href="#drinks">Drinks Menu</a>
+    </nav>
 
-    <div style="text-align:center;">
-        <button onclick="newFile()">[ NEW WORD FILE ]</button>
-        <button onclick="openLastFile()">[ OPEN LAST SAVE FILE ]</button>
-        <button onclick="showDirectory()">[ DIRECTORY ]</button>
-    </div>
+    <main>
 
-    <div class="main">
+        <!-- FIRST SECTION: FOOD -->
+        <section class="menu-section" id="food">
 
-        <!-- DIRECTORY -->
-        <div class="directory">
+            <h2 class="section-title">🍔 Food Menu</h2>
 
-            <h2>
-                C:\DOS\WORDPAD\FILES
-            </h2>
+            <div class="menu-grid">
 
-            <div id="fileList" class="file-list">
+                <div class="menu-card">
+                    <div class="icon">🍔</div>
+                    <h3>Classic Burger</h3>
+                    <p>Juicy burger with fresh vegetables and special sauce.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍔</div>
+                    <h3>Zinger Burger</h3>
+                    <p>Crispy spicy chicken fillet with fresh salad and sauce.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🌯</div>
+                    <h3>Chicken Shawarma</h3>
+                    <p>Tender chicken, fresh vegetables and creamy garlic sauce.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🥪</div>
+                    <h3>Chicken Sandwich</h3>
+                    <p>Delicious chicken sandwich with fresh vegetables and sauce.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍗</div>
+                    <h3>Crispy Chicken</h3>
+                    <p>Golden crispy chicken served with delicious seasoning.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍚</div>
+                    <h3>Chicken Rice</h3>
+                    <p>Flavorful rice served with tender chicken and special spices.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍚</div>
+                    <h3>Spicy Chicken Rice</h3>
+                    <p>Spicy and delicious chicken rice for a flavorful meal.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍚</div>
+                    <h3>Special Chicken Rice</h3>
+                    <p>Our special rice combination with perfectly cooked chicken.</p>
+                </div>
+
             </div>
+        </section>
 
-        </div>
 
-        <!-- EDITOR -->
-        <div class="editor-area">
+        <!-- SECOND SECTION: DRINKS -->
+        <section class="menu-section" id="drinks">
 
-            <div class="toolbar">
+            <h2 class="section-title">🥤 Soft Drinks & Juices</h2>
 
-                FILE NAME:
+            <div class="menu-grid">
 
-                <input
-                    type="text"
-                    id="fileName"
-                    class="filename"
-                    placeholder="Enter file name"
-                >
+                <div class="menu-card">
+                    <div class="icon">🍊</div>
+                    <h3>Fresh Orange Juice</h3>
+                    <p>Freshly prepared orange juice.</p>
+                </div>
 
-                <br>
+                <div class="menu-card">
+                    <div class="icon">🍎</div>
+                    <h3>Apple Juice</h3>
+                    <p>Refreshing and naturally fruity apple juice.</p>
+                </div>
 
-                <button onclick="saveFile()">
-                    [ SAVE FILE ]
-                </button>
+                <div class="menu-card">
+                    <div class="icon">🥭</div>
+                    <h3>Mango Juice</h3>
+                    <p>Sweet and refreshing mango juice.</p>
+                </div>
 
-                <button onclick="clearEditor()">
-                    [ CLEAR ]
-                </button>
+                <div class="menu-card">
+                    <div class="icon">🍍</div>
+                    <h3>Pineapple Juice</h3>
+                    <p>Tropical and refreshing pineapple juice.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍉</div>
+                    <h3>Watermelon Juice</h3>
+                    <p>Cool and refreshing watermelon drink.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍌</div>
+                    <h3>Banana Shake</h3>
+                    <p>Creamy and delicious banana shake.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🥤</div>
+                    <h3>Pepsi</h3>
+                    <p>Classic chilled Pepsi.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🥤</div>
+                    <h3>Sprite</h3>
+                    <p>Refreshing lemon-lime Sprite.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🥤</div>
+                    <h3>7UP</h3>
+                    <p>Cool and refreshing 7UP.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🥤</div>
+                    <h3>Coke</h3>
+                    <p>Classic chilled Coca-Cola.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🧊</div>
+                    <h3>Cold Drink</h3>
+                    <p>Choose your favorite chilled soft drink.</p>
+                </div>
+
+                <div class="menu-card">
+                    <div class="icon">🍹</div>
+                    <h3>Mixed Fruit Juice</h3>
+                    <p>A refreshing blend of delicious seasonal fruits.</p>
+                </div>
 
             </div>
+        </section>
 
-            <div class="status" id="status">
-                STATUS: READY
-            </div>
+    </main>
 
-            <div class="page-container">
-
-                <div
-                    id="editor"
-                    class="a4-page"
-                    contenteditable="true"
-                    spellcheck="true"
-                ></div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="bottom-bar">
-        DOS WORDPAD &nbsp; | &nbsp;
-        LOCAL FILE DIRECTORY &nbsp; | &nbsp;
-        READY
-    </div>
-
-</div>
+    <footer>
+        <p>© 2026 <span>Bicaf-Cafe</span> | Fresh Food & Refreshing Drinks</p>
+    </footer>
 
 
-<script>
+    <script>
 
-    const STORAGE_KEY = "DOS_WORDPAD_FILES";
+        // Dynamic theme changer
+        function changeTheme() {
+            document.body.classList.toggle("light-theme");
 
-    let currentFileId = null;
+            const button = document.querySelector(".theme-button");
 
-
-    // GET ALL SAVED FILES
-    function getFiles() {
-
-        const files =
-            localStorage.getItem(STORAGE_KEY);
-
-        return files ? JSON.parse(files) : [];
-    }
-
-
-    // SAVE ALL FILES
-    function setFiles(files) {
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(files)
-        );
-
-    }
-
-
-    // DISPLAY DIRECTORY
-    function showDirectory() {
-
-        renderDirectory();
-
-        setStatus(
-            "DIRECTORY: FILE LIST UPDATED"
-        );
-
-    }
-
-
-    // RENDER FILE DIRECTORY
-    function renderDirectory() {
-
-        const fileList =
-            document.getElementById("fileList");
-
-        const files = getFiles();
-
-        fileList.innerHTML = "";
-
-        if (files.length === 0) {
-
-            fileList.innerHTML =
-                '<div class="empty">NO FILES FOUND</div>';
-
-            return;
+            if (document.body.classList.contains("light-theme")) {
+                button.innerHTML = "☀️ Dark Theme";
+            } else {
+                button.innerHTML = "🌙 Light Theme";
+            }
         }
 
+        // Smooth scrolling
+        document.querySelectorAll("nav a").forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
 
-        files.sort(
-            (a, b) =>
-                new Date(b.date) -
-                new Date(a.date)
-        );
+                const target = document.querySelector(this.getAttribute("href"));
 
-
-        files.forEach(file => {
-
-            const item =
-                document.createElement("div");
-
-            item.className = "file-item";
-
-
-            const name =
-                document.createElement("div");
-
-            name.className = "file-name";
-
-            name.textContent =
-                ">" + file.name;
-
-
-            const date =
-                document.createElement("div");
-
-            date.className = "file-date";
-
-            date.textContent =
-                file.date;
-
-
-            const actions =
-                document.createElement("div");
-
-            actions.className =
-                "file-actions";
-
-
-            const openButton =
-                document.createElement("button");
-
-            openButton.textContent =
-                "OPEN";
-
-            openButton.onclick = function(e) {
-
-                e.stopPropagation();
-
-                openFile(file.id);
-
-            };
-
-
-            const deleteButton =
-                document.createElement("button");
-
-            deleteButton.textContent =
-                "DELETE";
-
-            deleteButton.onclick =
-                function(e) {
-
-                    e.stopPropagation();
-
-                    deleteFile(file.id);
-
-                };
-
-
-            actions.appendChild(openButton);
-
-            actions.appendChild(deleteButton);
-
-
-            item.appendChild(name);
-
-            item.appendChild(date);
-
-            item.appendChild(actions);
-
-
-            item.onclick =
-                function() {
-
-                    openFile(file.id);
-
-                };
-
-
-            fileList.appendChild(item);
-
+                target.scrollIntoView({
+                    behavior: "smooth"
+                });
+            });
         });
 
-    }
-
-
-    // CREATE NEW FILE
-    function newFile() {
-
-        currentFileId = null;
-
-        document.getElementById(
-            "fileName"
-        ).value = "";
-
-        document.getElementById(
-            "editor"
-        ).innerHTML = "";
-
-        document.getElementById(
-            "fileName"
-        ).focus();
-
-        setStatus(
-            "NEW FILE: READY FOR WRITING"
-        );
-
-    }
-
-
-    // SAVE FILE
-    function saveFile() {
-
-        const fileName =
-            document.getElementById(
-                "fileName"
-            ).value.trim();
-
-        const content =
-            document.getElementById(
-                "editor"
-            ).innerHTML;
-
-
-        if (!fileName) {
-
-            alert(
-                "Please enter a file name."
-            );
-
-            document.getElementById(
-                "fileName"
-            ).focus();
-
-            return;
-        }
-
-
-        if (
-            !document.getElementById(
-                "editor"
-            ).innerText.trim()
-        ) {
-
-            alert(
-                "Please write something before saving."
-            );
-
-            return;
-        }
-
-
-        const files = getFiles();
-
-        const now =
-            new Date().toLocaleString();
-
-
-        // UPDATE EXISTING FILE
-        if (currentFileId) {
-
-            const index =
-                files.findIndex(
-                    f =>
-                        f.id === currentFileId
-                );
-
-
-            if (index !== -1) {
-
-                files[index].name =
-                    fileName;
-
-                files[index].content =
-                    content;
-
-                files[index].date =
-                    now;
-
-            }
-
-        }
-
-        // CREATE NEW FILE
-        else {
-
-            const newFileObject = {
-
-                id:
-                    Date.now().toString(),
-
-                name:
-                    fileName,
-
-                content:
-                    content,
-
-                date:
-                    now
-
-            };
-
-
-            files.push(
-                newFileObject
-            );
-
-            currentFileId =
-                newFileObject.id;
-
-        }
-
-
-        setFiles(files);
-
-        renderDirectory();
-
-        setStatus(
-            "FILE SAVED: " + fileName
-        );
-
-    }
-
-
-    // OPEN FILE
-    function openFile(id) {
-
-        const files =
-            getFiles();
-
-        const file =
-            files.find(
-                f => f.id === id
-            );
-
-
-        if (!file) {
-
-            alert(
-                "File not found."
-            );
-
-            return;
-        }
-
-
-        currentFileId =
-            file.id;
-
-
-        document.getElementById(
-            "fileName"
-        ).value =
-            file.name;
-
-
-        document.getElementById(
-            "editor"
-        ).innerHTML =
-            file.content;
-
-
-        setStatus(
-            "FILE OPENED: " + file.name
-        );
-
-    }
-
-
-    // OPEN LAST SAVED FILE
-    function openLastFile() {
-
-        const files =
-            getFiles();
-
-
-        if (files.length === 0) {
-
-            alert(
-                "No saved files found."
-            );
-
-            return;
-        }
-
-
-        files.sort(
-            (a, b) =>
-                new Date(b.date) -
-                new Date(a.date)
-        );
-
-
-        openFile(
-            files[0].id
-        );
-
-    }
-
-
-    // DELETE FILE
-    function deleteFile(id) {
-
-        const files =
-            getFiles();
-
-        const file =
-            files.find(
-                f => f.id === id
-            );
-
-
-        if (!file) return;
-
-
-        const confirmDelete =
-            confirm(
-                "Delete file \"" +
-                file.name +
-                "\"?"
-            );
-
-
-        if (!confirmDelete) return;
-
-
-        const remaining =
-            files.filter(
-                f => f.id !== id
-            );
-
-
-        setFiles(
-            remaining
-        );
-
-
-        if (currentFileId === id) {
-
-            newFile();
-
-        }
-
-
-        renderDirectory();
-
-        setStatus(
-            "FILE DELETED: " +
-            file.name
-        );
-
-    }
-
-
-    // CLEAR EDITOR
-    function clearEditor() {
-
-        const confirmClear =
-            confirm(
-                "Clear the current document?"
-            );
-
-
-        if (!confirmClear) return;
-
-
-        document.getElementById(
-            "editor"
-        ).innerHTML = "";
-
-
-        setStatus(
-            "EDITOR CLEARED"
-        );
-
-    }
-
-
-    // STATUS MESSAGE
-    function setStatus(message) {
-
-        document.getElementById(
-            "status"
-        ).textContent =
-            "STATUS: " + message;
-
-    }
-
-
-    // INITIAL DIRECTORY LOAD
-    renderDirectory();
-
-</script>
+    </script>
 
 </body>
 </html>
